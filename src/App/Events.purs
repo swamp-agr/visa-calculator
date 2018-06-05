@@ -189,8 +189,12 @@ foldp (AddPeriod nd nda) (State st) = noEffects $
                   }
   nr2 = zeroDateRange (date nd) st.nextId
 
-foldp (RemovePeriod pid) (State st) = noEffects $
-  State st { userRanges = filterPeriodById (/=) pid st.userRanges }
+foldp (RemovePeriod pid) (State st) = 
+  { state: State st { userRanges = filterUserRangeById (/=) pid st.userRanges, ranges = filterDateRangeById (/=) pid st.ranges }
+  , effects:
+    [ pure $ Just CalculateDays
+    ]
+  }
 
 {-foldp (CalculateDays) (State st) = noEffects $
   State st { result = res }
@@ -250,11 +254,17 @@ foldp (CalculateDays) (State st) =
         res = show $ algorithm td lb ub dranges
         dranges = map dateRangeToPeriod st.ranges
 
-ixPeriod :: UserRange -> Int
-ixPeriod (UserRange x) = x.id
+ixUserRange :: UserRange -> Int
+ixUserRange (UserRange x) = x.id
 
-filterPeriodById :: (Int -> Int -> Boolean) -> Int -> Array UserRange -> Array UserRange
-filterPeriodById pred pid visas = filter ((pred pid) <<< ixPeriod) visas
+filterUserRangeById :: (Int -> Int -> Boolean) -> Int -> Array UserRange -> Array UserRange
+filterUserRangeById pred pid visas = filter ((pred pid) <<< ixUserRange) visas
+
+ixDateRange :: DateRange -> Int
+ixDateRange (DateRange x) = x.id
+
+filterDateRangeById :: (Int -> Int -> Boolean) -> Int -> Array DateRange -> Array DateRange
+filterDateRangeById pred pid visas = filter ((pred pid) <<< ixDateRange) visas
 
 data Attr = Start | End
 data Validation = InvalidFormatStart | InvalidFormatEnd
