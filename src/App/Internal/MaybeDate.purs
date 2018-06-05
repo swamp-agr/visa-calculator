@@ -11,10 +11,12 @@ import Data.Foreign.Generic (defaultOptions, genericEncode)
 import Data.Newtype (class Newtype)
 import Data.Maybe (Maybe(..), fromJust)
 import Data.Date
+import Data.Enum
 import Data.Time.Duration
 import Data.Semiring ((+))
 import Data.Int (round, toNumber)
 import Data.Number (fromString)
+import Partial.Unsafe (unsafePartial)
 
 -- | MaybeDate | --
 -- Simple newtype wrapper for Maybe Date
@@ -34,6 +36,14 @@ instance encodeMaybeDate :: Encode MaybeDate where
 -- Helpers
 emptyDate :: MaybeDate
 emptyDate = MaybeDate { unMaybeDate : Nothing }
+
+-- builder
+makeMaybeDate :: Date -> MaybeDate
+makeMaybeDate d = MaybeDate { unMaybeDate: Just d }
+
+unsafeMakeDate :: Int -> Int -> Int -> Date
+unsafeMakeDate y m d = unsafePartial $ fromJust
+                     $ canonicalDate <$> toEnum y <*> toEnum m <*> toEnum d
 
 -- calculate Diff between two MaybeDate and wrap result in MaybeInt
 calculateDiff :: MaybeDate -> MaybeDate -> MaybeInt

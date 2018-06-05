@@ -23,7 +23,7 @@ import Control.Applicative (pure)
 import Control.Apply ((<$>),(<*>))
 import Data.Maybe (Maybe(..), fromJust)
 import Control.Comonad (extract)
-import Data.Array ((:), filter, head, length, concatMap, dropWhile)
+import Data.Array ((:), filter, head, length, concatMap, dropWhile, sortBy, (!!), singleton)
 import Data.Ring ((-), sub, negate)
 import Data.Semiring ((+))
 import Data.Semigroup (append)
@@ -225,11 +225,11 @@ foldp (CalculateDays) (State st) =
          _ <- liftEff' $ log $ "Lower bound: " <> (show lb)
          _ <- liftEff' $ log $ "Upper bound: " <> (show ub)
          _ <- liftEff' $ log $ "DateRange length: " <> (show $ length dranges)
+
          _ <- liftEff' $ log $ "DateRange length (in past): " <> (show $ length fs)
          _ <- liftEff' $ log $ "DateRange length (w/o dummy period): " <> (show $ length fs)
          _ <- liftEff' $ log $ "Date length (in past, w/o dummy): " <> (show $ length fps)
          _ <- liftEff' $ log $ "Date length (future points): " <> (show $ length fds)
-         -- _ <- liftEff' $ traverse_ log $ map (append "Date length (in past, w/o dummy): ") $ map show fps
          _ <- liftEff' $ log $ "1st: ResultPoint: " <> (show $ unsafePartial $ fromJust $ head rps)
          _ <- liftEff' $ log $ "ResultPoint (before limit reached): " <> (show $ length rps')
          _ <- liftEff' $ log $ "dateToFuturePoint: Not in future: " <> (show $ length ps)
@@ -252,7 +252,18 @@ foldp (CalculateDays) (State st) =
         (MaybeDate mbtoday) = st.today
         td = unsafePartial $ fromJust mbtoday.unMaybeDate
         res = show $ algorithm td lb ub dranges
-        dranges = map dateRangeToPeriod st.ranges
+        dranges = map dateRangeToPeriod $ overlap6 st.ranges
+        -- TEST DATA --
+        testMaybeDate1 = makeMaybeDate $ unsafeMakeDate 2018 5 1
+        testMaybeDate2 = makeMaybeDate $ unsafeMakeDate 2018 5 15
+        testMaybeDate3 = makeMaybeDate $ unsafeMakeDate 2018 5 30
+        testMaybeDate4 = makeMaybeDate $ unsafeMakeDate 2018 6 8
+        testMaybeDate5 = makeMaybeDate $ unsafeMakeDate 2018 6 18
+        testDateRange1 = makeDateRange testMaybeDate1 testMaybeDate2 (negate 2)
+        testDateRange2 = makeDateRange testMaybeDate1 testMaybeDate3 (negate 3)
+        testDateRange3 = makeDateRange testMaybeDate4 testMaybeDate5 (negate 4)
+        
+
 
 ixUserRange :: UserRange -> Int
 ixUserRange (UserRange x) = x.id
