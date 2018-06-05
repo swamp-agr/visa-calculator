@@ -248,13 +248,16 @@ limitReached (ResultPoint r) = r.direction == Now
 algorithm :: Date -> Int -> Int -> Array Period -> ResultPoint
 algorithm _ _ _ [] = emptyResultPoint
 algorithm today lower upper xs =
-  if null fs
-    then emptyResultPoint -- TODO
-    else if null rps'
-         then if null rps
-              then emptyResultPoint
-              else unsafePartial $ fromJust $ head rps
-         else unsafePartial $ fromJust $ head rps'
+  if null xss
+    then emptyResultPoint
+    else 
+      if null fs
+        then x2rp
+        else if null rps'
+             then if null rps
+                  then emptyResultPoint
+                  else unsafePartial $ fromJust $ head rps
+             else unsafePartial $ fromJust $ head rps'
   where xss = filter (notEq z2) xs
         fs = filter (not $ rangeInPast today) xss
         fds = concatMap periodToDates fs
@@ -262,6 +265,7 @@ algorithm today lower upper xs =
         rps = map futureToResultPoint fps
         rps' = dropWhile (not $ limitReached) rps
         z2 = emptyPeriod
+        x2rp = futureToResultPoint $ dateToFuturePoint xss lower upper today
 
 justShowDatePartE day1 def =
   case day1 of
