@@ -149,6 +149,7 @@ foldp (ChangeRange attr pid d str) (State st) =
             
              day <- pure $ justShowDatePartE xday "01"
              out <- pure $ wrapToString (toDateTime d) day
+             _ <- liftEff' $ log $ show res1
              if res1
                  then pure $ Just CalculateDays
                  else pure $ Just $ ChangeRangeError attr StartGreaterThanEnd pid out
@@ -299,7 +300,7 @@ setUserInputById End pid new (UserRange v) =
       then (UserRange { start: v.start
                       , end: DateWidget { widgetDate: new, widgetMsg: emptyMsg }
                       , id: v.id
-                      , msg: v.msg
+                      , msg: emptyMsg
                       })
       else (UserRange v)
 
