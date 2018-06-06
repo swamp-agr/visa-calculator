@@ -15,8 +15,8 @@ import Control.Bind (discard)
 import Data.Function (($), const)
 import Pux.DOM.HTML (HTML)
 import Pux.DOM.Events
-import Text.Smolder.HTML (div, h1, h3, h4, input, table, tbody, th, tr, td, span, button, br, label)
-import Text.Smolder.HTML.Attributes (className, type', placeholder, value)
+import Text.Smolder.HTML (div, h1, h3, h4, input, table, tbody, th, tr, td, span, button, br, label, a)
+import Text.Smolder.HTML.Attributes (className, type', placeholder, value, href)
 import Text.Smolder.Markup ((!), (#!), text)
 import Data.Foldable (for_)
 import Data.DateTime
@@ -64,8 +64,16 @@ view (State s) = do
           row do
             intro "3. ..."
             intro $ "RESULT: " <> s.result
-
-      
+  div ! className "row justify-content-md-center" $ do
+    label $ text "Want more?"
+    br
+    div ! className "col-sm-auto" $ do
+      span ! className "text-left" $ text "Donate by PayPal: "
+      a ! href "https://www.paypal.me/swampagr" $ text "https://www.paypal.me/swampagr"
+  div ! className "row justify-content-md-center" $ do
+    div ! className "col-sm-auto" $ do
+      span $ text "Contribute by GitHub: "
+      a ! href "http://github.com/swamp-agr/visa-calculator" $ text "http://github.com/swamp-agr/visa-calculator"
   where
   row = div ! className "row"
   col = div ! className "col-sm-5"
