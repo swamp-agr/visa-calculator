@@ -220,29 +220,29 @@ foldp (CalculateDays) (State st) =
              ps'' = filter (not $ rangeInPast startDay) ps'
              startDay = addDays td (negate ub)
              alldays = concatMap periodToDates ps''
-         _ <- liftEff' $ log $ "====== START ======="
-         _ <- liftEff' $ log $ "Today: " <> (show st.today)
-         _ <- liftEff' $ log $ "Lower bound: " <> (show lb)
-         _ <- liftEff' $ log $ "Upper bound: " <> (show ub)
-         _ <- liftEff' $ log $ "DateRange length: " <> (show $ length dranges)
+         -- _ <- liftEff' $ log $ "====== START ======="
+         -- _ <- liftEff' $ log $ "Today: " <> (show st.today)
+         -- _ <- liftEff' $ log $ "Lower bound: " <> (show lb)
+         -- _ <- liftEff' $ log $ "Upper bound: " <> (show ub)
+         -- _ <- liftEff' $ log $ "DateRange length: " <> (show $ length dranges)
 
-         _ <- liftEff' $ log $ "DateRange length (in past): " <> (show $ length fs)
-         _ <- liftEff' $ log $ "DateRange length (w/o dummy period): " <> (show $ length fs)
-         _ <- liftEff' $ log $ "Date length (in past, w/o dummy): " <> (show $ length fps)
-         _ <- liftEff' $ log $ "Date length (future points): " <> (show $ length fds)
-         _ <- liftEff' $ log $ "1st: ResultPoint: " <> (show $ unsafePartial $ fromJust $ head rps)
-         _ <- liftEff' $ log $ "ResultPoint (before limit reached): " <> (show $ length rps')
-         _ <- liftEff' $ log $ "dateToFuturePoint: Not in future: " <> (show $ length ps)
-         _ <- liftEff' $ traverse_ log $ map (append "dateToFuturePoint: (not in future) ps: ") $ map show ps
-         _ <- liftEff' $ traverse_ log $ map (append "dateToFuturePoint: (not in future, merged) ps': ") $ map show ps'
-         _ <- liftEff' $ log $ "dateToFuturePoint: startDay: " <> (show startDay)
-         _ <- liftEff' $ log $ "dateToFuturePoint: not in future intersects with upper bound in the past: " <> (show $ length ps'')
-         _ <- liftEff' $ traverse_ log $ map (append "dateToFuturePoint: ps'': ") $ map show ps''
-         _ <- liftEff' $ log $ "dateToFuturePoint: all days: " <> (show $ length alldays)
-         -- _ <- liftEff' $ traverse_ log $ map (append "dateToFuturePoint: alldays: ") $ map show alldays
-         _ <- liftEff' $ log $ "1st FuturePoint: " <> (show $ unsafePartial $ fromJust $ head fps)
+         -- _ <- liftEff' $ log $ "DateRange length (in past): " <> (show $ length fs)
+         -- _ <- liftEff' $ log $ "DateRange length (w/o dummy period): " <> (show $ length fs)
+         -- _ <- liftEff' $ log $ "Date length (in past, w/o dummy): " <> (show $ length fps)
+         -- _ <- liftEff' $ log $ "Date length (future points): " <> (show $ length fds)
+         -- _ <- liftEff' $ log $ "1st: ResultPoint: " <> (show $ unsafePartial $ fromJust $ head rps)
+         -- _ <- liftEff' $ log $ "ResultPoint (before limit reached): " <> (show $ length rps')
+         -- _ <- liftEff' $ log $ "dateToFuturePoint: Not in future: " <> (show $ length ps)
+         -- _ <- liftEff' $ traverse-- _ log $ map (append "dateToFuturePoint: (not in future) ps: ") $ map show ps
+         -- _ <- liftEff' $ traverse-- _ log $ map (append "dateToFuturePoint: (not in future, merged) ps': ") $ map show ps'
+         -- _ <- liftEff' $ log $ "dateToFuturePoint: startDay: " <> (show startDay)
+         -- _ <- liftEff' $ log $ "dateToFuturePoint: not in future intersects with upper bound in the past: " <> (show $ length ps'')
+         -- _ <- liftEff' $ traverse-- _ log $ map (append "dateToFuturePoint: ps'': ") $ map show ps''
+         -- _ <- liftEff' $ log $ "dateToFuturePoint: all days: " <> (show $ length alldays)
+         -- _ <- liftEff' $ traverse-- _ log $ map (append "dateToFuturePoint: alldays: ") $ map show alldays
+         -- _ <- liftEff' $ log $ "1st FuturePoint: " <> (show $ unsafePartial $ fromJust $ head fps)
 
-         _ <- liftEff' $ log $ "====== END ======="
+         -- _ <- liftEff' $ log $ "====== END ======="
 
          pure Nothing
     ]
