@@ -42,15 +42,15 @@ css = do
     textAlign center
 
   fromString "h1" ? do
-    fontSize (48.0 #px)
+    -- fontSize (48.0 #px)
     marginTop (48.0 #px)
     textTransform uppercase
     letterSpacing (6.0 #px)
 
   fromString "table" ? do
     borderRadius (2.0 #px) (2.0 #px) (2.0 #px) (2.0 #px)
-    marginLeft (auto)
-    marginRight (auto)
+    -- marginLeft (auto)
+    -- marginRight (auto)
     padding (6.0 #px) (6.0 #px) (6.0 #px) (6.0 #px)
     textDecoration noneTextDecoration
 

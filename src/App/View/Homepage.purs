@@ -60,10 +60,9 @@ view (State s) = do
           br
           for_ s.userRanges renderPeriod
 
-        plainCell "col-md-12" $ do
-          intro "3. ..."
+        plainCell "col-md-12 col-xs-12" $ do
           intro $ "RESULT: " <> s.result
-        plainCell "col-md-12" $ do
+        plainCell "col-md-12 col-xs-12" $ do
           label $ text "Want more?"
           br
           div ! className "col-sm-auto" $ do
@@ -76,7 +75,7 @@ view (State s) = do
       div ! className "col-md-3" $ text ""
   where
   row = div ! className "row-md-12"
-  col = div ! className "col-md-6"
+  col = div ! className "col-md-6 col-sm-12 col-xs-12"
   plainCell y =
     \x -> div ! className "row" $ do
       div ! className y $ x
@@ -85,9 +84,9 @@ view (State s) = do
     case (fromMsg p.msg) of
       Just x -> div ! className "label label-default" $ text x
       Nothing -> div ! className "row" $ text ""
-    div ! className "col-sm-5" $ renderCalendar Start p.id p.start
-    div ! className "col-sm-5" $ renderCalendar End p.id p.end
-    div ! className "col-sm-2" $ do
+    div ! className "col-sm-5 col-xs-5" $ renderCalendar Start p.id p.start
+    div ! className "col-sm-5 col-xs-5" $ renderCalendar End p.id p.end
+    div ! className "col-sm-2 col-xs-2" $ do
       button #! onClick (const $ RemovePeriod p.id) ! className "btn btn-primary" $ text "Remove"
   renderCalendar attr pid (DateWidget d) = div ! className "form-group" $ do
       div ! className "input-group" $ do
