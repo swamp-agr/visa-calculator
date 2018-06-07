@@ -5,9 +5,10 @@ import App.View.NotFound as NotFound
 import App.Routes (Route(NotFound, Home))
 import App.State (State(..))
 import App.Events (Event)
-import CSS (CSS, fromString, (?), fontSize, marginTop, marginRight, marginLeft, px, value, key, color, backgroundColor, padding, borderRadius)
+import CSS (CSS, fromString, (?), fontSize, marginTop, marginRight, marginLeft, px, value, key, color, backgroundColor, padding, borderRadius, minWidth, width, display, inline)
 import CSS.Common (auto)
 import CSS.Border (border, solid)
+import CSS.Size (nil, pct)
 import CSS.TextAlign (center, textAlign)
 import CSS.Text (textDecoration, noneTextDecoration, letterSpacing)
 import CSS.Text.Transform (textTransform, uppercase)
@@ -70,3 +71,8 @@ css = do
   fromString ".github:hover" ? do
     backgroundColor blue
     color white
+
+  fromString ".custom-inline" ? do
+    minWidth nil
+    width $ (15.0 #pct)
+    display inline

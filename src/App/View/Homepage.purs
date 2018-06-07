@@ -31,58 +31,62 @@ view (State s) = do
   div do
     h1 $ text "Visa Calculator"
     row do
+      div ! className "col-md-3" $ text ""
       col do
-        row do
-          div ! className "col-sm-12" $ do
-            button #! onClick (const GetNow) ! className "btn btn-primary" $ text "Add Trip"
-        br
-        row do
-          div ! className "col-sm-12" $ do
-            for_ s.userRanges renderPeriod
-      div ! className "col-sm-2" $ text ""
-      col do
-        div do 
-          row do
-            intro "1. Give me your trips (previous and planned)"
-            intro "2. Give me your visa limitations"
-            intro "(X days in period of Y days)"
-          br
-          row do
-            case (getVisaMsg s.visa) of
-              ErrorMsg { fromErrorMsg: Nothing } -> div $ text ""
-              ErrorMsg x -> do
-                div ! className "label label-default text-left col-sm-4" $ do
-                  label $ text $ unsafePartial $ fromJust $ x.fromErrorMsg
-          row do
-            div ! className "text-left col-sm-2" $ do
-              label $ text "X days:"
+        plainCell "col-md-12" $ do
+          intro "1. Give me your visa limitations"
+        plainCell "col-md-12" $ do
+          case (getVisaMsg s.visa) of
+            ErrorMsg { fromErrorMsg: Nothing } -> div $ text ""
+            ErrorMsg x -> do
+              div ! className "label label-default col-sm-7" $ do
+                label $ text $ unsafePartial $ fromJust $ x.fromErrorMsg
+        div ! className "text-left" $ do
+          div ! className "content custom-inline" $ do
+            span ! className "custom-inline" $ text "["
+            span ! className "custom-inline" $ do
               renderBound Start (getLowerBound s.visa)
-            div ! className "text-left col-sm-2" $ do
-              label $ text "Y days:"
+            span ! className "custom-inline" $ text "] days in period of ["
+            span ! className "custom-inline" $ do
               renderBound End (getUpperBound s.visa)
+            span ! className "custom-inline" $ text "] days."
+            span ! className "custom-inline" $ text ""
+            
+        plainCell "col-md-12" $ do
+          intro "2. Give me your trips (previous and planned)"
+          button #! onClick (const GetNow) ! className "btn btn-primary" $ text "Add Trip"
+        div do
+          
           br
-          row do
-            intro "3. ..."
-            intro $ "RESULT: " <> s.result
-  div ! className "row justify-content-md-center" $ do
-    label $ text "Want more?"
-    br
-    div ! className "col-sm-auto" $ do
-      span ! className "text-left" $ text "Donate by PayPal: "
-      a ! href "https://www.paypal.me/swampagr" $ text "https://www.paypal.me/swampagr"
-  div ! className "row justify-content-md-center" $ do
-    div ! className "col-sm-auto" $ do
-      span $ text "Contribute by GitHub: "
-      a ! href "http://github.com/swamp-agr/visa-calculator" $ text "http://github.com/swamp-agr/visa-calculator"
+          for_ s.userRanges renderPeriod
+
+        plainCell "col-md-12" $ do
+          intro "3. ..."
+          intro $ "RESULT: " <> s.result
+        plainCell "col-md-12" $ do
+          label $ text "Want more?"
+          br
+          div ! className "col-sm-auto" $ do
+            span ! className "text-left" $ text "Donate by PayPal: "
+            a ! href "https://www.paypal.me/swampagr" $ text "https://www.paypal.me/swampagr"
+          div ! className "row justify-content-md-center" $ do
+            div ! className "col-sm-auto" $ do
+              span $ text "Contribute by GitHub: "
+              a ! href "http://github.com/swamp-agr/visa-calculator" $ text "http://github.com/swamp-agr/visa-calculator"        
+      div ! className "col-md-3" $ text ""
   where
-  row = div ! className "row"
-  col = div ! className "col-sm-5"
+  row = div ! className "row-md-12"
+  col = div ! className "col-md-6"
+  plainCell y =
+    \x -> div ! className "row" $ do
+      div ! className y $ x
+
   renderPeriod (UserRange p) = row do
     case (fromMsg p.msg) of
       Just x -> div ! className "label label-default" $ text x
-      Nothing -> div $ text ""
-    col $ renderCalendar Start p.id p.start
-    col $ renderCalendar End p.id p.end
+      Nothing -> div ! className "row" $ text ""
+    div ! className "col-sm-5" $ renderCalendar Start p.id p.start
+    div ! className "col-sm-5" $ renderCalendar End p.id p.end
     div ! className "col-sm-2" $ do
       button #! onClick (const $ RemovePeriod p.id) ! className "btn btn-primary" $ text "Remove"
   renderCalendar attr pid (DateWidget d) = div ! className "form-group" $ do
@@ -95,5 +99,5 @@ view (State s) = do
   chooseBound Start = onChange (ProvideLower)
   chooseBound End   = onChange (ProvideUpper)
   intro x = h3 ! className "text-left" $ text x
-  renderBound attr x = input #! chooseBound attr ! type' "text" ! className "form-control"
+  renderBound attr x = input #! chooseBound attr ! type' "text" ! className "form-control custom-inline"
                            ! value (show x)
