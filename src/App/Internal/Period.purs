@@ -77,12 +77,12 @@ instance showResultPoint :: Show ResultPoint where
       None -> ""
       Now -> (showDate rd)
              <> " is a date where limit reached. You have 0 available days!"
-      Below -> "Good! With given date, "
+      Below -> "Good! Date: "
                <> (showDate rd)
-               <> ", visa will expire in " <> (show $ negate dtw) <> " day(s)."
-      Above -> "Something went wrong. With given date, "
+               <> ". The visa will expire in " <> (show $ negate dtw) <> " day(s)."
+      Above -> "Oops! At "
                <> (showDate rd)
-               <> ", visa expired " <> (show dtw) <> " day(s) ago."
+               <> ". The visa expires " <> (show dtw) <> " day(s) ago."
 
 instance encodeResultPoint :: Encode ResultPoint where
   encode (ResultPoint val) =
@@ -162,7 +162,7 @@ dateRangeToPeriod _ = emptyPeriod
 -- convert range to array of dates for further folding
 periodToDates :: Period -> Array Date
 periodToDates (Period { start: x, end: y }) = map (addDays x) (0 .. z)
-  where z = (flip sub 1) $ extractDays $ diff y x
+  where z = extractDays $ diff y x
 
 addDays :: Date -> Int -> Date
 addDays d ix = date $ unsafePartial $ fromJust $ adjust (Days $ toNumber ix) (toDateTime d)
@@ -256,7 +256,7 @@ algorithm today lower upper xs =
         else if null rps'
              then if null rps
                   then emptyResultPoint
-                  else unsafePartial $ fromJust $ head rps
+                  else unsafePartial $ fromJust $ last rps
              else unsafePartial $ fromJust $ head rps'
   where xss = filter (notEq z2) xs
         fs = filter (not $ rangeInPast today) xss

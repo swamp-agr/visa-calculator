@@ -43,7 +43,7 @@ view (State s) = do
       col do
         div do 
           row do
-            intro "1. Give me your previous trips"
+            intro "1. Give me your trips (previous and planned)"
             intro "2. Give me your visa limitations"
             intro "(X days in period of Y days)"
           br
