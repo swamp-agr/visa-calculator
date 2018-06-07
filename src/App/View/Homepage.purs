@@ -15,7 +15,7 @@ import Control.Bind (discard)
 import Data.Function (($), const)
 import Pux.DOM.HTML (HTML)
 import Pux.DOM.Events
-import Text.Smolder.HTML (div, h1, h3, h4, input, table, tbody, th, tr, td, span, button, br, label, a)
+import Text.Smolder.HTML (div, h1, h3, h4, input, table, tbody, th, tr, td, span, button, br, label, a, ul, li)
 import Text.Smolder.HTML.Attributes (className, type', placeholder, value, href)
 import Text.Smolder.Markup ((!), (#!), text)
 import Data.Foldable (for_)
@@ -63,6 +63,12 @@ view (State s) = do
         plainCell "col-md-12 col-xs-12" $ do
           intro $ "RESULT: " <> s.result
         plainCell "col-md-12 col-xs-12" $ do
+          label $ text "Next steps:"
+          div ! className "text-left" $ text "1. Add calendar widget instead of YYYY-MM-DD manual input"
+          div ! className "text-left" $ text "2. Add extra visa types, algorythm and samples"
+          div ! className "text-left" $ text "3. Add export/import capabilities"
+        br
+        plainCell "col-md-12 col-xs-12" $ do
           label $ text "Want more?"
           br
           div ! className "col-sm-auto" $ do
@@ -72,6 +78,12 @@ view (State s) = do
             div ! className "col-sm-auto" $ do
               span $ text "Contribute by GitHub: "
               a ! href "http://github.com/swamp-agr/visa-calculator" $ text "http://github.com/swamp-agr/visa-calculator"        
+            br
+            div ! className "col-sm-auto" $ do
+              span $ text "Created by "
+              a ! href "https://an-pro.org" $ text "Andrey Prokopenko"
+              span $ text " <*> Powered by "
+              a ! href "http://purescript-pux.org" $ text "Pux"
       div ! className "col-md-3" $ text ""
   where
   row = div ! className "row-md-12"
